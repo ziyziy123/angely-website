@@ -1,9 +1,0 @@
-﻿Angely Setup v1.0.0 for Windows
-================================
-This is a placeholder installer. The full application is currently under development.
-
-Expected release: Coming Soon
-Platform: Windows 10+
-Size: ~85 MB (placeholder: this file is a stub)
-
-Visit https://ziyziy123.github.io/angely-website for updates.
