@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>在线演示 — Angely</title>
+<link rel="stylesheet" href="common.css">
+</head>
+<body>
+<a href="index.html" class="back-link">← 返回首页</a>
+<main class="demo-container">
+<h1>在线演示</h1>
+<p class="update-date">轻量体验 · 完整功能请下载客户端</p>
+
+<div class="demo-notice">
+  ⚠️ <strong>提示：</strong>本页面仅提供基础文字聊天体验和语音音色试听，完整功能（拟人语音对话、表情互动、联网搜索、角色扮演等）请 <a href="index.html#download">下载客户端</a>。
+</div>
+
+<div class="demo-chat">
+  <div class="demo-chat-header">
+    <img src="assets/logo.png" alt="Angely" class="demo-chat-avatar-img">
+    <span>Angely</span>
+  </div>
+  <div class="demo-chat-body" id="chatBody">
+    <div class="demo-msg ai">你好呀！我是 Angely 👋<br>这是一个轻量演示版本，你可以和我聊天试试看～</div>
+  </div>
+  <div class="demo-chat-input-area">
+    <input type="text" id="chatInput" placeholder="输入消息…" maxlength="200" autocomplete="off">
+    <button id="sendBtn">发送</button>
+  </div>
+</div>
+
+<div class="demo-voice-samples">
+  <span style="font-size:0.85rem;color:var(--text-tertiary);display:flex;align-items:center;gap:4px">🎙️ 语音音色试听：</span>
+  <button class="voice-btn" data-voice="gentle">🌸 温柔</button>
+  <button class="voice-btn" data-voice="lively">⚡ 活泼</button>
+  <button class="voice-btn" data-voice="calm">🌿 沉稳</button>
+  <button class="voice-btn" data-voice="humor">😄 幽默</button>
+</div>
+</main>
+
+<script src="theme.js"></script>
+<script>
+(function(){
+  var chatBody = document.getElementById('chatBody');
+  var input = document.getElementById('chatInput');
+  var sendBtn = document.getElementById('sendBtn');
+
+  // Predefined demo responses
+  var responses = {
+    default: [
+      '嗯，我听到了～这是一个轻量演示，完整版的我会有更丰富的回复能力 😊',
+      '这个问题很有意思！在完整客户端里，我可以联网搜索最新资讯来帮你深入了解。',
+      '哈哈，你说得对～不过我现在的回复是预设好的演示版本，下载客户端后我们就可以畅聊啦！',
+      '谢谢你的分享！完整版 Angely 支持语音对话、表情互动，体验会好很多哦 ✨',
+      '我能感受到你的心情～完整版我会根据语境自动调整语气和情绪，更加自然。',
+      '好问题！试试下载完整客户端吧，我可以用云端算力帮你做更深入的分析。'
+    ]
+  };
+  var idx = 0;
+
+  function addMessage(text, type) {
+    var div = document.createElement('div');
+    div.className = 'demo-msg ' + type;
+    div.textContent = text;
+    chatBody.appendChild(div);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+
+  function simulateResponse(userText) {
+    // Simple keyword matching
+    var reply;
+    var lower = userText.toLowerCase();
+    if (lower.includes('你好') || lower.includes('hi') || lower.includes('嗨')) {
+      reply = '你好呀！欢迎体验 Angely 演示版 🌟 想聊些什么呢？';
+    } else if (lower.includes('语音') || lower.includes('声音')) {
+      reply = '完整版 Angely 采用顶级商用 TTS 引擎，语调自然起伏，带真实停顿和换气感。点击下方的音色按钮可以试听不同声线风格哦～';
+    } else if (lower.includes('功能') || lower.includes('能做什么')) {
+      reply = 'Angely 支持拟人语音对话、表情互动、实时联网搜索、角色扮演，还有本地+云端混合算力！下载客户端可以体验全部功能 🚀';
+    } else if (lower.includes('下载') || lower.includes('安装')) {
+      reply = '你可以回到首页，在下载专区选择对应平台的安装包。Windows 有 .exe 和绿色免安装版，macOS 是 .dmg，Android 是 .apk～全部免费！';
+    } else if (lower.includes('隐私') || lower.includes('安全')) {
+      reply = 'Angely 非常重视隐私：聊天数据仅本地 AES-256 加密存储，不强制收集个人信息，不需要注册账号。详细信息请看《隐私政策》。';
+    } else if (lower.includes('角色') || lower.includes('人设')) {
+      reply = '在完整版里，你可以自由设定 AI 的身份、性格、语气和行为逻辑。比如把 Angely 设成温柔学姐、毒舌损友、专业顾问…想象力没有上限！';
+    } else {
+      reply = responses.default[idx % responses.default.length];
+      idx++;
+    }
+    return reply;
+  }
+
+  function sendMessage() {
+    var text = input.value.trim();
+    if (!text) return;
+    addMessage(text, 'user');
+    input.value = '';
+    sendBtn.disabled = true;
+    sendBtn.textContent = '…';
+    setTimeout(function(){
+      var reply = simulateResponse(text);
+      addMessage(reply, 'ai');
+      sendBtn.disabled = false;
+      sendBtn.textContent = '发送';
+    }, 600 + Math.random() * 600);
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') sendMessage();
+  });
+
+  // Voice sample buttons (visual feedback only - real TTS requires client)
+  document.querySelectorAll('.voice-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.voice-btn').forEach(function(b){ b.classList.remove('playing'); });
+      btn.classList.add('playing');
+      var voiceName = btn.textContent.trim();
+      addMessage('🎙️ 试听音色：' + voiceName + ' — 此音色在客户端中可用语音合成技术实时生成，网页版仅作风格展示。', 'ai');
+      setTimeout(function(){ btn.classList.remove('playing'); }, 2000);
+    });
+  });
+
+  // Focus input on load
+  input.focus();
+})();
+</script>
+</body>
+</html>

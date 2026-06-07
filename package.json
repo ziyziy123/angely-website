@@ -1,0 +1,10 @@
+{
+  "name": "angely-website",
+  "version": "1.0.0",
+  "description": "Angely 拟人AI聊天程序 — 官方下载网页",
+  "private": true,
+  "scripts": {
+    "start": "npx serve .",
+    "deploy": "echo 'Static site ready to deploy'"
+  }
+}

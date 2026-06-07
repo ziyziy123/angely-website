@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Angely — 拟人AI聊天程序。极简干净、高拟人语音、全平台自适应。免费下载 Windows / macOS / Android 客户端。">
+<meta name="keywords" content="AI聊天,人工智能,拟人语音,TTS,角色扮演,AI助手,Angely">
+<meta name="author" content="Angely">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#7c6f64">
+<link rel="icon" type="image/png" sizes="256x256" href="assets/logo.png">
+<link rel="apple-touch-icon" href="assets/logo.png">
+<meta property="og:image" content="https://angely.app/assets/logo.png">
+<link rel="canonical" href="https://angely.app/">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Angely — 拟人AI聊天程序">
+<meta property="og:description" content="你的拟人AI伙伴，随时在线。拟人语音·表情互动·联网搜索·角色扮演·零广告。免费下载 Windows/macOS/Android。">
+<meta property="og:url" content="https://angely.app/">
+<meta property="og:site_name" content="Angely">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Angely — 拟人AI聊天程序">
+<meta name="twitter:description" content="你的拟人AI伙伴，随时在线。免费下载 Windows/macOS/Android 客户端。">
+<!-- Structured Data -->
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Angely","applicationCategory":"AIApplication","operatingSystem":"Windows, macOS, Android","description":"拟人AI聊天程序 — 高拟人语音、表情互动、联网搜索、角色扮演、零广告","offers":{"@type":"Offer","price":"0","priceCurrency":"CNY"},"author":{"@type":"Organization","name":"Angely"}}
+</script>
+<title>Angely — 拟人AI聊天程序</title>
+<style>
+/* ===== CSS Custom Properties (双主题) ===== */
+:root {
+  --bg-primary: #f8f7f4;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f0eee9;
+  --bg-card: #ffffff;
+  --bg-nav: rgba(248,247,244,0.92);
+  --text-primary: #2c2c2c;
+  --text-secondary: #6b6b6b;
+  --text-tertiary: #999999;
+  --accent: #7c6f64;
+  --accent-hover: #5e534a;
+  --accent-light: #e8e4dd;
+  --border: #e0dcd5;
+  --border-light: #ebe7e0;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.10);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --gradient-hero: linear-gradient(180deg, #f8f7f4 0%, #ede9e2 100%);
+  --success: #6b8f71;
+  --font-mono: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+  --max-width: 1200px;
+  --nav-height: 64px;
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #242424;
+  --bg-tertiary: #1e1e1e;
+  --bg-card: #2a2a2a;
+  --bg-nav: rgba(26,26,26,0.92);
+  --text-primary: #e8e6e3;
+  --text-secondary: #a0a0a0;
+  --text-tertiary: #6b6b6b;
+  --accent: #a89880;
+  --accent-hover: #c4b59a;
+  --accent-light: #2e2a24;
+  --border: #363636;
+  --border-light: #2e2e2e;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.3);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.4);
+  --gradient-hero: linear-gradient(180deg, #1a1a1a 0%, #1f1d19 100%);
+  --success: #7da084;
+}
+
+/* ===== Reset & Base ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  transition: background var(--transition), color var(--transition);
+  overflow-x: hidden;
+}
+
+/* ===== Container ===== */
+.container { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+
+/* ===== Navigation ===== */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  height: var(--nav-height);
+  background: var(--bg-nav);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid var(--border-light);
+  transition: background var(--transition), border var(--transition);
+}
+.nav-inner {
+  max-width: var(--max-width); margin: 0 auto; padding: 0 24px;
+  height: 100%; display: flex; align-items: center; justify-content: space-between;
+}
+.nav-brand {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 1.25rem; font-weight: 700; color: var(--text-primary);
+  text-decoration: none; letter-spacing: -0.02em;
+}
+.nav-logo-img{width:32px;height:32px;border-radius:50%;object-fit:cover}
+.nav-links { display: flex; gap: 4px; list-style: none; }
+.nav-links a {
+  padding: 8px 16px; border-radius: var(--radius-sm);
+  color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;
+  transition: all var(--transition);
+}
+.nav-links a:hover { color: var(--text-primary); background: var(--accent-light); }
+.nav-actions { display: flex; align-items: center; gap: 8px; }
+.theme-toggle {
+  width: 40px; height: 40px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--bg-secondary);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; transition: all var(--transition); color: var(--text-secondary);
+}
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.btn-support {
+  padding: 8px 18px; border-radius: var(--radius-sm);
+  background: var(--accent); color: #fff; border: none; cursor: pointer;
+  font-size: 0.85rem; font-weight: 600; transition: all var(--transition);
+  text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-support:hover { background: var(--accent-hover); }
+
+/* Mobile nav hamburger */
+.nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; color: var(--text-primary); }
+
+/* ===== Sections Common ===== */
+.section { padding: 100px 0; }
+.section-label {
+  display: inline-block; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 12px;
+}
+.section-title { font-size: 2.25rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 16px; line-height: 1.25; }
+.section-desc { font-size: 1.05rem; color: var(--text-secondary); max-width: 600px; line-height: 1.8; }
+
+/* ===== Hero Section ===== */
+.hero {
+  min-height: 100vh; display: flex; align-items: center; padding-top: var(--nav-height);
+  background: var(--gradient-hero); position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; top: -50%; right: -20%;
+  width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-light) 0%, transparent 70%);
+  opacity: 0.5; pointer-events: none;
+}
+.hero-content { position: relative; z-index: 1; }
+.hero-tagline {
+  font-size: clamp(2.25rem, 5vw, 3.5rem); font-weight: 800;
+  letter-spacing: -0.04em; line-height: 1.15; margin-bottom: 20px;
+}
+.hero-tagline span { color: var(--accent); }
+.hero-subtitle { font-size: 1.15rem; color: var(--text-secondary); margin-bottom: 36px; max-width: 520px; line-height: 1.8; }
+.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+.btn-primary, .btn-secondary {
+  padding: 14px 32px; border-radius: var(--radius-md); font-size: 1rem;
+  font-weight: 600; cursor: pointer; transition: all var(--transition);
+  text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+  border: none; letter-spacing: -0.01em;
+}
+.btn-primary { background: var(--accent); color: #fff; box-shadow: var(--shadow-md); }
+.btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+.btn-secondary {
+  background: var(--bg-secondary); color: var(--text-primary);
+  border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+}
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+.hero-preview {
+  margin-top: 48px; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;
+}
+.hero-preview img {
+  max-width: 320px; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);
+  transition: transform var(--transition); border: 1px solid var(--border-light);
+}
+.hero-preview img:hover { transform: translateY(-4px); }
+
+/* ===== Features Section ===== */
+.features-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px;
+}
+.feature-card {
+  background: var(--bg-card); border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg); padding: 32px 28px;
+  transition: all var(--transition); box-shadow: var(--shadow-sm);
+}
+.feature-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.feature-icon {
+  width: 48px; height: 48px; border-radius: var(--radius-sm);
+  background: var(--accent-light); display: flex; align-items: center; justify-content: center;
+  font-size: 1.35rem; margin-bottom: 20px;
+}
+.feature-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 10px; letter-spacing: -0.02em; }
+.feature-card p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; }
+
+/* ===== Download Section ===== */
+.download { background: var(--bg-tertiary); }
+.download-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
+.download-card {
+  background: var(--bg-card); border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg); padding: 32px 28px;
+  box-shadow: var(--shadow-sm); transition: all var(--transition); position: relative;
+}
+.download-card:hover { box-shadow: var(--shadow-md); }
+.download-card.recommended { border-color: var(--accent); }
+.download-card.recommended::before {
+  content: '推荐'; position: absolute; top: 12px; right: 14px;
+  font-size: 0.7rem; font-weight: 700; color: #fff; background: var(--accent);
+  padding: 2px 10px; border-radius: 20px;
+}
+.download-platform { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.platform-icon { font-size: 2rem; }
+.platform-name { font-size: 1.25rem; font-weight: 700; }
+.download-meta { margin-bottom: 24px; }
+.download-meta-item {
+  display: flex; justify-content: space-between; padding: 7px 0;
+  border-bottom: 1px solid var(--border-light); font-size: 0.85rem;
+}
+.download-meta-item:last-child { border-bottom: none; }
+.meta-label { color: var(--text-tertiary); }
+.meta-value { font-weight: 600; color: var(--text-primary); }
+.download-actions { display: flex; flex-direction: column; gap: 8px; }
+.btn-dl {
+  width: 100%; padding: 12px 20px; border-radius: var(--radius-sm);
+  font-size: 0.9rem; font-weight: 600; cursor: pointer; text-align: center;
+  text-decoration: none; transition: all var(--transition); border: none;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn-dl.primary { background: var(--accent); color: #fff; }
+.btn-dl.primary:hover { background: var(--accent-hover); }
+.btn-dl.secondary {
+  background: transparent; color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+.btn-dl.secondary:hover { border-color: var(--accent); color: var(--accent); }
+.download-checksum {
+  margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-light);
+  font-size: 0.75rem; font-family: var(--font-mono); color: var(--text-tertiary);
+  word-break: break-all; line-height: 1.5;
+}
+.download-checksum strong { color: var(--text-secondary); display: block; margin-bottom: 4px; font-family: inherit; }
+.download-note {
+  margin-top: 16px; padding: 12px 14px; background: var(--accent-light);
+  border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ===== Changelog Section ===== */
+.changelog-list { margin-top: 40px; max-width: 800px; }
+.changelog-item {
+  padding: 28px 0; border-bottom: 1px solid var(--border-light);
+}
+.changelog-item:first-child { padding-top: 0; }
+.changelog-version {
+  display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px;
+}
+.version-tag {
+  font-size: 1.1rem; font-weight: 700; color: var(--accent); letter-spacing: -0.02em;
+}
+.version-date { font-size: 0.85rem; color: var(--text-tertiary); }
+.changelog-changes h4 { font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); margin: 10px 0 4px; text-transform: uppercase; letter-spacing: 0.04em; }
+.changelog-changes ul { padding-left: 18px; }
+.changelog-changes li { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.8; }
+
+/* ===== Footer ===== */
+.footer {
+  background: var(--bg-secondary); border-top: 1px solid var(--border-light);
+  padding: 40px 0; text-align: center;
+}
+.footer-links { display: flex; justify-content: center; gap: 28px; margin-bottom: 16px; flex-wrap: wrap; }
+.footer-links a {
+  font-size: 0.85rem; color: var(--text-secondary); text-decoration: none;
+  transition: color var(--transition);
+}
+.footer-links a:hover { color: var(--accent); }
+.footer-copy { font-size: 0.8rem; color: var(--text-tertiary); }
+
+/* ===== Responsive ===== */
+@media (max-width: 1024px) {
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+  .download-grid { grid-template-columns: repeat(2, 1fr); }
+  .download-grid .download-card:last-child { grid-column: 1 / -1; max-width: 400px; justify-self: center; }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav-hamburger { display: block; }
+  .hero-tagline { font-size: 1.8rem; }
+  .section-title { font-size: 1.6rem; }
+  .features-grid, .download-grid { grid-template-columns: 1fr; }
+  .download-grid .download-card:last-child { max-width: 100%; }
+  .hero-preview { flex-direction: column; align-items: center; }
+  .hero-preview img { max-width: 260px; }
+  .section { padding: 64px 0; }
+  .hero { min-height: auto; padding: 120px 0 80px; }
+}
+@media (max-width: 480px) {
+  .container { padding: 0 16px; }
+  .hero-actions { flex-direction: column; }
+  .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Navigation ===== -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-brand">
+      <img src="assets/logo.png" alt="Angely" class="nav-logo-img">
+      Angely
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#hero">首页</a></li>
+      <li><a href="#features">功能介绍</a></li>
+      <li><a href="#changelog">版本日志</a></li>
+      <li><a href="help.html">帮助中心</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="切换主题" title="切换深浅色主题">☀️</button>
+      <a href="help.html" class="btn-support">💬 客服</a>
+      <button class="nav-hamburger" id="hamburger" aria-label="菜单">☰</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== Hero ===== -->
+<section class="hero" id="hero">
+  <div class="container hero-content">
+    <h1 class="hero-tagline">你的 <span>拟人AI</span> 伙伴<br>随时在线，懂你所想</h1>
+    <p class="hero-subtitle">
+      极简界面 · 真人级语音 · 表情互动 · 联网搜索<br>
+      本地+云端混合算力 · 全自定义角色扮演 · 零广告
+    </p>
+    <div class="hero-actions">
+      <a href="#download" class="btn-primary">⬇ 立即下载</a>
+      <a href="demo.html" class="btn-secondary">▶ 在线演示</a>
+    </div>
+    <div class="hero-preview">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='200' viewBox='0 0 320 200'%3E%3Crect fill='%23f0eee9' width='320' height='200' rx='16'/%3E%3Crect fill='%23e0dcd5' x='16' y='12' width='288' height='24' rx='6'/%3E%3Ccircle fill='%237c6f64' cx='170' cy='98' r='28'/%3E%3Crect fill='%23fff' x='60' y='140' width='200' height='36' rx='18'/%3E%3Ctext fill='%23999' font-family='sans-serif' font-size='11' text-anchor='middle' x='160' y='163'%3E桌面端预览%3C/text%3E%3Ctext fill='%23bbb' font-family='sans-serif' font-size='9' text-anchor='middle' x='160' y='75'%3E聊天界面示意%3C/text%3E%3C/svg%3E" alt="桌面端预览" width="320" height="200">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='200' viewBox='0 0 160 280'%3E%3Crect fill='%23f0eee9' width='160' height='280' rx='20'/%3E%3Crect fill='%23e0dcd5' x='12' y='14' width='136' height='20' rx='6'/%3E%3Ccircle fill='%237c6f64' cx='80' cy='130' r='24'/%3E%3Crect fill='%23fff' x='30' y='210' width='100' height='32' rx='16'/%3E%3Ctext fill='%23999' font-family='sans-serif' font-size='10' text-anchor='middle' x='80' y='233'%3E移动端预览%3C/text%3E%3Ctext fill='%23bbb' font-family='sans-serif' font-size='9' text-anchor='middle' x='80' y='105'%3E界面示意%3C/text%3E%3C/svg%3E" alt="移动端预览" width="160" height="280">
+    </div>
+  </div>
+</section>
+
+<!-- ===== Features ===== -->
+<section class="section" id="features">
+  <div class="container">
+    <span class="section-label">核心功能</span>
+    <h2 class="section-title">不只是聊天，更是陪伴</h2>
+    <p class="section-desc">六大核心能力，打造前所未有的 AI 交互体验。</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🎙️</div>
+        <h3>高拟人语音</h3>
+        <p>顶级商用 TTS 引擎，语调自然起伏，带停顿、换气感、情绪变化。支持实时对话、全文朗读，语速/音调/音量自由调节。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">😊</div>
+        <h3>表情互动</h3>
+        <p>内置简约风格表情库，AI 根据语境自动匹配表情。表情尺寸自适应屏幕，加载流畅无卡顿。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌐</div>
+        <h3>实时联网搜索</h3>
+        <p>实时获取全网资讯、知识与热点，AI 自动精简总结，以自然口语回复。断网时自动禁用并友好提示。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>全能混合算力</h3>
+        <p>常规任务本地毫秒级响应，复杂分析、建模、代码推演自动分流云端。兼顾设备性能与运算能力。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎭</div>
+        <h3>自定义角色扮演</h3>
+        <p>自由设定角色身份、性格、语气、行为逻辑。人设长期记忆，跨对话不跳戏，随时修改或切换。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <h3>全设备自适应</h3>
+        <p>Windows / macOS / Android 全覆盖。所有分辨率完美适配，轻量化低占用，支持后台运行与悬浮窗。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Download ===== -->
+<section class="section download" id="download">
+  <div class="container">
+    <span class="section-label">免费下载</span>
+    <h2 class="section-title">三大平台，纯净安装</h2>
+    <p class="section-desc">无需注册、无需登录、无需付费。每个安装包附带 MD5 / SHA-256 校验码，支持断点续传。</p>
+    <div class="download-grid">
+      <!-- Windows -->
+      <div class="download-card recommended">
+        <div class="download-platform">
+          <span class="platform-icon">🪟</span>
+          <span class="platform-name">Windows</span>
+        </div>
+        <div class="download-meta">
+          <div class="download-meta-item"><span class="meta-label">版本</span><span class="meta-value">v1.0.0</span></div>
+          <div class="download-meta-item"><span class="meta-label">更新</span><span class="meta-value">2026-06-07</span></div>
+          <div class="download-meta-item"><span class="meta-label">大小</span><span class="meta-value">~85 MB</span></div>
+          <div class="download-meta-item"><span class="meta-label">系统</span><span class="meta-value">Windows 10+</span></div>
+        </div>
+        <div class="download-actions">
+          <a href="#" class="btn-dl primary">⬇ .exe 安装包</a>
+          <a href="#" class="btn-dl secondary">📦 .zip 绿色免安装版</a>
+        </div>
+        <div class="download-checksum">
+          <strong>文件校验</strong>
+          MD5: a1b2c3d4e5f6...<br>
+          SHA-256: 7a8b9c0d1e2f...
+        </div>
+      </div>
+      <!-- macOS -->
+      <div class="download-card">
+        <div class="download-platform">
+          <span class="platform-icon">🍎</span>
+          <span class="platform-name">macOS</span>
+        </div>
+        <div class="download-meta">
+          <div class="download-meta-item"><span class="meta-label">版本</span><span class="meta-value">v1.0.0</span></div>
+          <div class="download-meta-item"><span class="meta-label">更新</span><span class="meta-value">2026-06-07</span></div>
+          <div class="download-meta-item"><span class="meta-label">大小</span><span class="meta-value">~92 MB</span></div>
+          <div class="download-meta-item"><span class="meta-label">系统</span><span class="meta-value">macOS 12+</span></div>
+        </div>
+        <div class="download-actions">
+          <a href="#" class="btn-dl primary">⬇ .dmg 镜像文件</a>
+          <a href="#" class="btn-dl secondary">🔗 备用下载链接</a>
+        </div>
+        <div class="download-checksum">
+          <strong>文件校验</strong>
+          MD5: f1e2d3c4b5a6...<br>
+          SHA-256: 9a0b1c2d3e4f...
+        </div>
+        <div class="download-note">
+          💡 <strong>安装提示：</strong>首次打开如遇安全拦截，请前往「系统设置 → 隐私与安全性」点击「仍要打开」即可。详见安装教程。
+        </div>
+      </div>
+      <!-- Android -->
+      <div class="download-card">
+        <div class="download-platform">
+          <span class="platform-icon">🤖</span>
+          <span class="platform-name">Android</span>
+        </div>
+        <div class="download-meta">
+          <div class="download-meta-item"><span class="meta-label">版本</span><span class="meta-value">v1.0.0</span></div>
+          <div class="download-meta-item"><span class="meta-label">更新</span><span class="meta-value">2026-06-07</span></div>
+          <div class="download-meta-item"><span class="meta-label">大小</span><span class="meta-value">~48 MB</span></div>
+          <div class="download-meta-item"><span class="meta-label">系统</span><span class="meta-value">Android 8.0+</span></div>
+        </div>
+        <div class="download-actions">
+          <a href="#" class="btn-dl primary">⬇ .apk 安装包</a>
+          <a href="#" class="btn-dl secondary">🔗 备用下载链接</a>
+        </div>
+        <div class="download-checksum">
+          <strong>文件校验</strong>
+          MD5: c1d2e3f4a5b6...<br>
+          SHA-256: 1a2b3c4d5e6f...
+        </div>
+        <div class="download-note">
+          💡 <strong>安装提示：</strong>安装时系统可能提示「允许安装未知来源应用」，这是 Android 对非应用商店安装包的标准安全提示，点击「允许」即可正常安装。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Changelog ===== -->
+<section class="section" id="changelog">
+  <div class="container">
+    <span class="section-label">版本日志</span>
+    <h2 class="section-title">持续迭代，越来越好</h2>
+    <div class="changelog-list">
+      <div class="changelog-item">
+        <div class="changelog-version">
+          <span class="version-tag">v1.0.0</span>
+          <span class="version-date">2026-06-07</span>
+        </div>
+        <div class="changelog-changes">
+          <h4>🎉 首次发布</h4>
+          <ul>
+            <li>高拟人语音引擎集成，支持实时对话与全文朗读</li>
+            <li>极简轻奢 UI，浅色/深色双主题</li>
+            <li>全分辨率自适应布局，Windows / macOS / Android 全覆盖</li>
+            <li>内置表情库，AI 自动匹配语境表情</li>
+            <li>实时联网搜索，AI 精简总结</li>
+            <li>本地+云端混合算力，智能分流</li>
+            <li>自定义角色扮演，长期记忆</li>
+            <li>聊天记录本地 AES-256 加密存储</li>
+          </ul>
+        </div>
+      </div>
+      <div class="changelog-item">
+        <div class="changelog-version">
+          <span class="version-tag">Coming Soon</span>
+          <span class="version-date">—</span>
+        </div>
+        <div class="changelog-changes">
+          <p style="color:var(--text-tertiary);font-size:0.9rem;">更多功能开发中，敬请期待…</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer class="footer" id="help">
+  <div class="container">
+    <div class="footer-links">
+      <a href="privacy.html">隐私政策</a>
+      <a href="terms.html">用户协议</a>
+      <a href="mailto:support@angely.app">联系我们</a>
+      <a href="help.html">帮助中心</a>
+    </div>
+    <p class="footer-copy">&copy; 2026 Angely. All rights reserved. · 本软件不强制收集用户个人隐私信息 · 聊天数据仅本地加密存储</p>
+  </div>
+</section>
+
+<!-- ===== Scripts ===== -->
+<script>
+(function(){
+  const html = document.documentElement;
+  const toggle = document.getElementById('themeToggle');
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  const nav = document.getElementById('nav');
+
+  // Theme
+  const saved = localStorage.getItem('angely-theme') || 'light';
+  html.setAttribute('data-theme', saved);
+  updateToggleIcon(saved);
+
+  toggle.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('angely-theme', next);
+    updateToggleIcon(next);
+  });
+
+  function updateToggleIcon(theme) {
+    toggle.textContent = theme === 'light' ? '🌙' : '☀️';
+  }
+
+  // Mobile nav
+  hamburger.addEventListener('click', () => {
+    const visible = navLinks.style.display === 'flex';
+    navLinks.style.display = visible ? 'none' : 'flex';
+    navLinks.style.flexDirection = 'column';
+    navLinks.style.position = 'absolute';
+    navLinks.style.top = '64px';
+    navLinks.style.left = '0';
+    navLinks.style.right = '0';
+    navLinks.style.background = 'var(--bg-nav)';
+    navLinks.style.backdropFilter = 'blur(16px)';
+    navLinks.style.padding = '16px 24px';
+    navLinks.style.gap = '8px';
+    navLinks.style.borderBottom = '1px solid var(--border-light)';
+    hamburger.textContent = visible ? '☰' : '✕';
+  });
+
+  // Close mobile nav on link click
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        navLinks.style.display = 'none';
+        hamburger.textContent = '☰';
+      }
+    });
+  });
+
+  // Resize handler - reset mobile nav state
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+      navLinks.style.display = '';
+      navLinks.style.flexDirection = '';
+      navLinks.style.position = '';
+      navLinks.style.top = '';
+      navLinks.style.left = '';
+      navLinks.style.right = '';
+      navLinks.style.background = '';
+      navLinks.style.padding = '';
+      navLinks.style.gap = '';
+      navLinks.style.borderBottom = '';
+      hamburger.textContent = '☰';
+    }
+  });
+
+  // Smooth scroll for all anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // Nav shadow on scroll
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 10) {
+      nav.style.boxShadow = 'var(--shadow-md)';
+    } else {
+      nav.style.boxShadow = 'none';
+    }
+  });
+
+  console.log('Angely 官方下载页已就绪 · v1.0.0');
+})();
+</script>
+
+</body>
+</html>

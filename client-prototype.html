@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Angely 桌面客户端 · UI 原型</title>
+<style>
+/* ===== Theme Variables ===== */
+:root {
+  --bg-window: #f5f3ef;
+  --bg-chat: #ede9e3;
+  --bg-sidebar: #faf9f7;
+  --bg-input: #ffffff;
+  --bg-bubble-ai: #ffffff;
+  --bg-bubble-user: #7c6f64;
+  --bg-card: #ffffff;
+  --bg-overlay: rgba(0,0,0,0.3);
+  --text-primary: #2c2c2c;
+  --text-secondary: #6b6b6b;
+  --text-tertiary: #999;
+  --text-bubble-user: #ffffff;
+  --accent: #7c6f64;
+  --accent-hover: #5e534a;
+  --accent-light: #e8e4dd;
+  --border: #e0dcd5;
+  --border-light: #ebe7e0;
+  --red: #c94a4a;
+  --green: #5a9e6f;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --transition: 0.2s cubic-bezier(0.4,0,0.2,1);
+  --font: -apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+}
+[data-theme="dark"] {
+  --bg-window: #1a1a1a;
+  --bg-chat: #1e1e1e;
+  --bg-sidebar: #222;
+  --bg-input: #2a2a2a;
+  --bg-bubble-ai: #2a2a2a;
+  --bg-bubble-user: #a89880;
+  --bg-card: #2a2a2a;
+  --bg-overlay: rgba(0,0,0,0.6);
+  --text-primary: #e8e6e3;
+  --text-secondary: #a0a0a0;
+  --text-tertiary: #666;
+  --text-bubble-user: #fff;
+  --accent: #a89880;
+  --accent-hover: #c4b59a;
+  --accent-light: #2e2a24;
+  --border: #363636;
+  --border-light: #2e2e2e;
+  --red: #d46868;
+  --green: #6bae7e;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:var(--font);background:#d5d0c8;display:flex;justify-content:center;
+  align-items:center;min-height:100vh;padding:20px;-webkit-font-smoothing:antialiased;
+}
+/* Mockup frame */
+.mockup-label{
+  position:fixed;top:10px;left:50%;transform:translateX(-50%);
+  font-size:0.75rem;color:#888;letter-spacing:0.05em;z-index:10;
+  background:rgba(0,0,0,0.06);padding:4px 12px;border-radius:20px;
+}
+.app-window{
+  width:100%;max-width:420px;height:90vh;max-height:820px;
+  background:var(--bg-window);border-radius:20px;overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,0.25),0 0 0 1px rgba(0,0,0,0.08);
+  display:flex;flex-direction:column;transition:background var(--transition);
+  position:relative;
+}
+/* Status Bar */
+.status-bar{
+  padding:10px 16px;display:flex;align-items:center;justify-content:space-between;
+  background:var(--bg-window);border-bottom:1px solid var(--border-light);
+  flex-shrink:0;z-index:5;
+}
+.status-brand-img{height:28px;border-radius:50%;object-fit:cover}
+.status-indicators{display:flex;align-items:center;gap:10px}
+.status-dot{width:8px;height:8px;border-radius:50%}
+.status-dot.online{background:var(--green);box-shadow:0 0 6px var(--green)}
+.status-dot.offline{background:var(--text-tertiary)}
+.status-icon{
+  width:30px;height:30px;border-radius:var(--radius-sm);border:none;
+  background:var(--bg-input);cursor:pointer;display:flex;align-items:center;
+  justify-content:center;font-size:0.9rem;transition:all var(--transition);
+  color:var(--text-secondary);
+}
+.status-icon:hover{background:var(--accent-light);color:var(--accent)}
+.status-icon.active{color:var(--accent)}
+/* Chat Area */
+.chat-area{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.chat-date-divider{
+  text-align:center;font-size:0.72rem;color:var(--text-tertiary);margin:8px 0;
+  position:relative;
+}
+.chat-date-divider::before,.chat-date-divider::after{
+  content:'';position:absolute;top:50%;width:30%;height:1px;background:var(--border-light);
+}
+.chat-date-divider::before{left:0}.chat-date-divider::after{right:0}
+.msg{max-width:82%;padding:10px 14px;border-radius:16px;font-size:0.88rem;line-height:1.55;animation:msgIn 0.25s ease;word-break:break-word}
+.msg.ai{align-self:flex-start;background:var(--bg-bubble-ai);color:var(--text-primary);border-bottom-left-radius:4px;box-shadow:var(--shadow-sm)}
+.msg.user{align-self:flex-end;background:var(--bg-bubble-user);color:var(--text-bubble-user);border-bottom-right-radius:4px}
+.msg .time{font-size:0.65rem;opacity:0.5;margin-top:4px;text-align:right}
+.msg.ai .time{color:var(--text-tertiary)}
+.msg-emoji{font-size:2.5rem;align-self:flex-start;animation:msgIn 0.25s ease}
+.typing-indicator{align-self:flex-start;display:flex;gap:4px;padding:10px 14px;background:var(--bg-bubble-ai);border-radius:16px;border-bottom-left-radius:4px}
+.typing-indicator span{width:7px;height:7px;border-radius:50%;background:var(--text-tertiary);animation:typing 1.4s infinite}
+.typing-indicator span:nth-child(2){animation-delay:0.2s}
+.typing-indicator span:nth-child(3){animation-delay:0.4s}
+@keyframes typing{0%,60%,100%{opacity:0.3;transform:scale(0.8)}30%{opacity:1;transform:scale(1)}}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+/* Input Area */
+.input-area{
+  padding:10px 16px;background:var(--bg-window);border-top:1px solid var(--border-light);
+  display:flex;align-items:flex-end;gap:8px;flex-shrink:0;
+}
+.input-actions{display:flex;gap:4px}
+.input-btn{
+  width:38px;height:38px;border-radius:50%;border:none;background:transparent;
+  cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;
+  transition:all var(--transition);color:var(--text-secondary);flex-shrink:0;
+}
+.input-btn:hover{background:var(--accent-light);color:var(--accent)}
+.input-field{
+  flex:1;border:none;background:var(--bg-input);border-radius:22px;padding:10px 16px;
+  font-size:0.88rem;color:var(--text-primary);outline:none;font-family:var(--font);
+  resize:none;max-height:100px;line-height:1.4;border:1px solid var(--border-light);
+  transition:border var(--transition);
+}
+.input-field:focus{border-color:var(--accent)}
+.input-field::placeholder{color:var(--text-tertiary)}
+.send-btn{
+  width:38px;height:38px;border-radius:50%;border:none;background:var(--accent);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:1rem;transition:all var(--transition);flex-shrink:0;
+}
+.send-btn:hover{background:var(--accent-hover);transform:scale(1.05)}
+.send-btn:disabled{opacity:0.4;cursor:default;transform:none}
+
+/* Settings panel (slide-up) */
+.settings-overlay{
+  position:absolute;inset:0;background:var(--bg-overlay);z-index:20;
+  display:none;align-items:flex-end;
+}
+.settings-overlay.show{display:flex}
+.settings-panel{
+  width:100%;max-height:75%;background:var(--bg-window);border-radius:20px 20px 0 0;
+  overflow-y:auto;padding:8px 20px 28px;animation:slideUp 0.3s ease;
+  box-shadow:0 -8px 32px rgba(0,0,0,0.15);
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.settings-handle{
+  width:36px;height:4px;background:var(--border);border-radius:2px;
+  margin:8px auto 18px;
+}
+.settings-header{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;
+}
+.settings-header h3{font-size:1.1rem;font-weight:700}
+.settings-close{
+  width:32px;height:32px;border-radius:50%;border:none;background:var(--bg-input);
+  cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;
+  color:var(--text-secondary);transition:all var(--transition);
+}
+.settings-close:hover{background:var(--accent-light)}
+.setting-group{margin-bottom:20px}
+.setting-group h4{font-size:0.75rem;font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px}
+.setting-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 0;border-bottom:1px solid var(--border-light);
+}
+.setting-item:last-child{border-bottom:none}
+.setting-label{font-size:0.88rem;font-weight:600;color:var(--text-primary)}
+.setting-desc{font-size:0.75rem;color:var(--text-tertiary);margin-top:2px}
+.slider{width:120px;accent-color:var(--accent)}
+.toggle-switch{position:relative;width:44px;height:26px;flex-shrink:0}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-slider{
+  position:absolute;cursor:pointer;inset:0;background:var(--border);
+  border-radius:26px;transition:var(--transition);
+}
+.toggle-slider::before{
+  content:'';position:absolute;height:20px;width:20px;left:3px;bottom:3px;
+  background:#fff;border-radius:50%;transition:var(--transition);
+}
+.toggle-switch input:checked+.toggle-slider{background:var(--accent)}
+.toggle-switch input:checked+.toggle-slider::before{transform:translateX(18px)}
+
+/* Role selector */
+.role-dropdown{
+  padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);
+  background:var(--bg-input);color:var(--text-primary);font-size:0.85rem;
+  font-family:var(--font);cursor:pointer;outline:none;width:150px;
+}
+
+/* Emoji picker */
+.emoji-picker{
+  display:none;position:absolute;bottom:70px;left:16px;background:var(--bg-card);
+  border-radius:var(--radius-lg);padding:10px;box-shadow:var(--shadow-lg);
+  z-index:15;border:1px solid var(--border-light);flex-wrap:wrap;gap:6px;
+  width:280px;
+}
+.emoji-picker.show{display:flex}
+.emoji-picker span{
+  font-size:1.4rem;cursor:pointer;padding:6px;border-radius:8px;transition:background var(--transition);
+}
+.emoji-picker span:hover{background:var(--accent-light)}
+
+/* Voice recording indicator */
+.voice-indicator{
+  position:absolute;bottom:80px;left:50%;transform:translateX(-50%);
+  background:var(--accent);color:#fff;padding:10px 24px;border-radius:24px;
+  font-size:0.85rem;font-weight:600;display:none;align-items:center;gap:8px;
+  box-shadow:var(--shadow-md);animation:pulse 1.5s infinite;
+}
+.voice-indicator.show{display:flex}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.7}}
+.voice-wave{display:flex;gap:2px;align-items:flex-end;height:16px}
+.voice-wave span{width:2px;background:#fff;border-radius:1px;animation:wave 0.6s infinite alternate}
+.voice-wave span:nth-child(2){animation-delay:0.1s;height:12px}
+.voice-wave span:nth-child(3){animation-delay:0.2s;height:16px}
+.voice-wave span:nth-child(4){animation-delay:0.3s;height:8px}
+.voice-wave span:nth-child(5){animation-delay:0.4s;height:14px}
+@keyframes wave{0%{height:4px}100%{height:16px}}
+
+/* Responsive "desktop" mockup hint */
+@media(min-width:900px){
+  .mockup-label::after{content:' · 移动端视图 (420px)'}
+}
+</style>
+</head>
+<body>
+
+<div class="mockup-label">Angely 客户端原型</div>
+
+<div class="app-window" id="app">
+  <!-- Status Bar -->
+  <div class="status-bar" id="statusBar">
+    <img src="assets/logo.png" alt="Angely" class="status-brand-img">
+    <div class="status-indicators">
+      <span class="status-dot online" id="netDot" title="联网状态"></span>
+      <button class="status-icon active" id="voiceToggle" title="语音开关">🎙️</button>
+      <button class="status-icon" id="themeBtn" title="切换主题">🌙</button>
+      <button class="status-icon" id="settingsBtn" title="设置">⚙️</button>
+    </div>
+  </div>
+
+  <!-- Chat Area -->
+  <div class="chat-area" id="chatArea">
+    <div class="chat-date-divider">今天</div>
+    <div class="msg ai">
+      你好呀！我是 Angely ✨<br>有什么我可以帮你的吗？
+      <div class="time">10:30</div>
+    </div>
+  </div>
+
+  <!-- Emoji Picker -->
+  <div class="emoji-picker" id="emojiPicker">
+    <span>😊</span><span>😂</span><span>❤️</span><span>👍</span><span>🎉</span><span>🔥</span>
+    <span>😢</span><span>😡</span><span>🤔</span><span>😴</span><span>🥰</span><span>😎</span>
+    <span>🙏</span><span>💪</span><span>🌟</span><span>✨</span><span>🌸</span><span>🍀</span>
+  </div>
+
+  <!-- Voice Indicator -->
+  <div class="voice-indicator" id="voiceIndicator">
+    <div class="voice-wave"><span></span><span></span><span></span><span></span><span></span></div>
+    正在聆听…
+  </div>
+
+  <!-- Input Area -->
+  <div class="input-area">
+    <div class="input-actions">
+      <button class="input-btn" id="emojiBtn" title="表情">😊</button>
+      <button class="input-btn" id="micBtn" title="语音对讲">🎤</button>
+      <button class="input-btn" id="searchBtn" title="联网搜索">🔍</button>
+    </div>
+    <textarea class="input-field" id="chatInput" placeholder="输入消息…" rows="1" maxlength="500"></textarea>
+    <button class="send-btn" id="sendBtn" title="发送">➤</button>
+  </div>
+
+  <!-- Settings Overlay -->
+  <div class="settings-overlay" id="settingsOverlay">
+    <div class="settings-panel">
+      <div class="settings-handle"></div>
+      <div class="settings-header">
+        <h3>⚙️ 设置</h3>
+        <button class="settings-close" id="settingsClose">✕</button>
+      </div>
+
+      <div class="setting-group">
+        <h4>语音设置</h4>
+        <div class="setting-item">
+          <div><div class="setting-label">语速</div><div class="setting-desc" id="speedLabel">1.0x</div></div>
+          <input type="range" class="slider" min="0.5" max="2" step="0.1" value="1" id="speedSlider">
+        </div>
+        <div class="setting-item">
+          <div><div class="setting-label">音调</div><div class="setting-desc" id="pitchLabel">中</div></div>
+          <input type="range" class="slider" min="-5" max="5" step="1" value="0" id="pitchSlider">
+        </div>
+        <div class="setting-item">
+          <div><div class="setting-label">音量</div><div class="setting-desc" id="volLabel">80%</div></div>
+          <input type="range" class="slider" min="0" max="100" step="5" value="80" id="volSlider">
+        </div>
+        <div class="setting-item">
+          <div>
+            <div class="setting-label">情绪声线</div>
+            <div class="setting-desc">根据对话内容自动切换</div>
+          </div>
+          <select class="role-dropdown" id="voiceStyle">
+            <option value="auto">🤖 自动切换</option>
+            <option value="gentle">🌸 温柔</option>
+            <option value="lively">⚡ 活泼</option>
+            <option value="calm">🌿 沉稳</option>
+            <option value="humor">😄 幽默</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <h4>角色设置</h4>
+        <div class="setting-item">
+          <div><div class="setting-label">当前角色</div><div class="setting-desc">支持自由设定身份与性格</div></div>
+          <select class="role-dropdown" id="roleSelect">
+            <option>Angely 默认</option>
+            <option>温柔学姐</option>
+            <option>毒舌损友</option>
+            <option>专业顾问</option>
+          </select>
+        </div>
+        <div class="setting-item">
+          <div><div class="setting-label">长期记忆</div><div class="setting-desc">跨对话保持角色设定</div></div>
+          <label class="toggle-switch"><input type="checkbox" checked id="memoryToggle"><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <h4>数据管理</h4>
+        <div class="setting-item">
+          <div><div class="setting-label">聊天加密存储</div><div class="setting-desc">AES-256 本地加密</div></div>
+          <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+        </div>
+        <div class="setting-item">
+          <div class="setting-label">导出聊天记录</div>
+          <button class="status-icon" style="width:auto;padding:6px 14px;font-size:0.8rem;border-radius:20px">导出</button>
+        </div>
+        <div class="setting-item">
+          <div class="setting-label">清空聊天记录</div>
+          <button class="status-icon" style="width:auto;padding:6px 14px;font-size:0.8rem;border-radius:20px;color:var(--red)" id="clearChat">清空</button>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <h4>关于</h4>
+        <div class="setting-item"><span class="setting-label">版本</span><span style="color:var(--text-secondary);font-size:0.85rem">v1.0.0</span></div>
+        <div class="setting-item">
+          <span class="setting-label">检查更新</span>
+          <button class="status-icon" style="width:auto;padding:6px 14px;font-size:0.8rem;border-radius:20px" onclick="alert('已是最新版本')">检查</button>
+        </div>
+      </div>
+
+      <div style="text-align:center;padding:16px 0 8px">
+        <a href="privacy.html" style="color:var(--text-tertiary);font-size:0.8rem;margin:0 8px;text-decoration:none" target="_blank">隐私政策</a>
+        <a href="terms.html" style="color:var(--text-tertiary);font-size:0.8rem;margin:0 8px;text-decoration:none" target="_blank">用户协议</a>
+        <a href="help.html" style="color:var(--text-tertiary);font-size:0.8rem;margin:0 8px;text-decoration:none" target="_blank">帮助</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="theme.js"></script>
+<script>
+(function(){
+  // ===== DOM =====
+  var chatArea = document.getElementById('chatArea');
+  var chatInput = document.getElementById('chatInput');
+  var sendBtn = document.getElementById('sendBtn');
+  var emojiBtn = document.getElementById('emojiBtn');
+  var emojiPicker = document.getElementById('emojiPicker');
+  var micBtn = document.getElementById('micBtn');
+  var voiceIndicator = document.getElementById('voiceIndicator');
+  var voiceToggle = document.getElementById('voiceToggle');
+  var searchBtn = document.getElementById('searchBtn');
+  var settingsBtn = document.getElementById('settingsBtn');
+  var settingsOverlay = document.getElementById('settingsOverlay');
+  var settingsClose = document.getElementById('settingsClose');
+  var themeBtn = document.getElementById('themeBtn');
+  var speedSlider = document.getElementById('speedSlider');
+  var pitchSlider = document.getElementById('pitchSlider');
+  var volSlider = document.getElementById('volSlider');
+  var speedLabel = document.getElementById('speedLabel');
+  var pitchLabel = document.getElementById('pitchLabel');
+  var volLabel = document.getElementById('volLabel');
+  var clearChat = document.getElementById('clearChat');
+  var netDot = document.getElementById('netDot');
+
+  // ===== Theme =====
+  var html = document.documentElement;
+  var savedTheme = localStorage.getItem('angely-client-theme') || 'light';
+  html.setAttribute('data-theme', savedTheme);
+  themeBtn.textContent = savedTheme === 'light' ? '🌙' : '☀️';
+
+  themeBtn.addEventListener('click', function(){
+    var next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('angely-client-theme', next);
+    themeBtn.textContent = next === 'light' ? '🌙' : '☀️';
+  });
+
+  // ===== Chat Messages =====
+  var responses = [
+    '嗯，我听到了～这个功能在完整客户端里会更加自然流畅 😊',
+    '好问题！让我想想…在完整版本中，我会用云端算力来深入分析这个。',
+    '哈哈，你说得对～不过我现在的回复能力已经可以覆盖大部分日常对话啦。',
+    '谢谢你的反馈！我们会持续优化 Angely 的交互体验 ✨',
+    '我能感受到你的心情～有什么想聊的都可以告诉我。',
+    '这个想法很有趣！需要我帮你进一步展开吗？',
+    '关于这个话题，完整版的联网搜索功能可以获取最新资讯来补充回答。'
+  ];
+  var respIdx = 0;
+
+  function addMsg(text, type){
+    var d = new Date();
+    var time = d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+    var div = document.createElement('div');
+    div.className = 'msg ' + type;
+    div.innerHTML = text + '<div class="time">' + time + '</div>';
+    chatArea.appendChild(div);
+    chatArea.scrollTop = chatArea.scrollHeight;
+    return div;
+  }
+
+  function addEmoji(emoji){
+    var div = document.createElement('div');
+    div.className = 'msg-emoji';
+    div.textContent = emoji;
+    chatArea.appendChild(div);
+    chatArea.scrollTop = chatArea.scrollHeight;
+  }
+
+  function showTyping(){
+    var div = document.createElement('div');
+    div.className = 'typing-indicator';
+    div.innerHTML = '<span></span><span></span><span></span>';
+    chatArea.appendChild(div);
+    chatArea.scrollTop = chatArea.scrollHeight;
+    return div;
+  }
+
+  function sendMessage(){
+    var text = chatInput.value.trim();
+    if (!text) return;
+    addMsg(text, 'user');
+    chatInput.value = '';
+
+    // Auto-resize textarea
+    chatInput.style.height = 'auto';
+
+    // Show typing
+    var typing = showTyping();
+    sendBtn.disabled = true;
+
+    setTimeout(function(){
+      typing.remove();
+      var reply;
+      var lower = text.toLowerCase();
+
+      if (lower.includes('你好')||lower.includes('hi')||lower.includes('嗨'))
+        reply = '你好呀！很高兴见到你 🌟 今天想聊些什么呢？';
+      else if (lower.includes('谢谢')||lower.includes('感谢'))
+        reply = '不客气！能帮到你我也很开心～还有什么需要随时说 😊';
+      else if (lower.includes('再见')||lower.includes('拜拜'))
+        reply = '好的，下次见！我会一直在这里等你的 👋✨';
+      else if (lower.includes('功能')||lower.includes('能做什么'))
+        reply = 'Angely 支持高拟人语音对话、表情互动、实时联网搜索、角色扮演，还有本地+云端混合算力！你想试试哪个功能？';
+      else if (lower.includes('emoji')||lower.includes('表情'))
+        { reply = '当然可以！😊 试试点击左下角的表情按钮～'; addEmoji('😊🎉✨'); }
+      else
+        reply = responses[respIdx++ % responses.length];
+
+      addMsg(reply, 'ai');
+      sendBtn.disabled = false;
+    }, 800 + Math.random() * 800);
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  chatInput.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
+  chatInput.addEventListener('input', function(){
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+  });
+
+  // ===== Emoji Picker =====
+  emojiBtn.addEventListener('click', function(e){
+    e.stopPropagation();
+    emojiPicker.classList.toggle('show');
+  });
+  emojiPicker.querySelectorAll('span').forEach(function(span){
+    span.addEventListener('click', function(){
+      addEmoji(this.textContent);
+      emojiPicker.classList.remove('show');
+    });
+  });
+  document.addEventListener('click', function(e){
+    if (!emojiPicker.contains(e.target) && e.target !== emojiBtn)
+      emojiPicker.classList.remove('show');
+  });
+
+  // ===== Voice Recording (simulated) =====
+  var isRecording = false;
+  micBtn.addEventListener('click', function(){
+    isRecording = !isRecording;
+    if (isRecording) {
+      micBtn.style.color = 'var(--red)';
+      micBtn.textContent = '⏹';
+      voiceIndicator.classList.add('show');
+      setTimeout(function(){
+        if (isRecording) {
+          isRecording = false;
+          micBtn.style.color = '';
+          micBtn.textContent = '🎤';
+          voiceIndicator.classList.remove('show');
+          addMsg('🎙️ 这是一条语音消息（完整版支持实时语音对话）', 'user');
+          setTimeout(function(){
+            addMsg('收到你的语音消息了～在完整客户端中，我会用真人级语音回复你！你可以点击顶部状态栏的 🎙️ 开关来控制语音功能。', 'ai');
+          }, 600);
+        }
+      }, 2500);
+    } else {
+      micBtn.style.color = '';
+      micBtn.textContent = '🎤';
+      voiceIndicator.classList.remove('show');
+    }
+  });
+
+  // ===== Voice Toggle =====
+  var voiceOn = true;
+  voiceToggle.addEventListener('click', function(){
+    voiceOn = !voiceOn;
+    voiceToggle.classList.toggle('active', voiceOn);
+    voiceToggle.textContent = voiceOn ? '🎙️' : '🔇';
+  });
+
+  // ===== Search Toggle =====
+  var searchOn = true;
+  searchBtn.addEventListener('click', function(){
+    searchOn = !searchOn;
+    searchBtn.style.color = searchOn ? '' : 'var(--red)';
+    if (!searchOn) {
+      addMsg('⚠️ 联网搜索已关闭。如需使用实时搜索功能，请重新开启。', 'ai');
+    }
+  });
+  // Simulate network toggle
+  searchBtn.addEventListener('dblclick', function(){
+    netDot.classList.toggle('online');
+    netDot.classList.toggle('offline');
+    if (!netDot.classList.contains('online')) {
+      searchBtn.style.opacity = '0.4';
+      addMsg('⚠️ 网络连接已断开，联网搜索功能暂时不可用。', 'ai');
+    } else {
+      searchBtn.style.opacity = '1';
+      addMsg('✅ 网络已恢复，联网搜索功能已就绪。', 'ai');
+    }
+  });
+
+  // ===== Settings =====
+  settingsBtn.addEventListener('click', function(){
+    settingsOverlay.classList.add('show');
+  });
+  settingsClose.addEventListener('click', function(){
+    settingsOverlay.classList.remove('show');
+  });
+  settingsOverlay.addEventListener('click', function(e){
+    if (e.target === settingsOverlay) settingsOverlay.classList.remove('show');
+  });
+
+  // Slider labels
+  speedSlider.addEventListener('input', function(){
+    speedLabel.textContent = parseFloat(this.value).toFixed(1) + 'x';
+  });
+  pitchSlider.addEventListener('input', function(){
+    var v = parseInt(this.value);
+    pitchLabel.textContent = v === 0 ? '中' : (v > 0 ? '高+' + v : '低' + Math.abs(v));
+  });
+  volSlider.addEventListener('input', function(){
+    volLabel.textContent = this.value + '%';
+  });
+
+  // Clear chat
+  clearChat.addEventListener('click', function(){
+    if (confirm('确定要清空所有聊天记录吗？此操作不可撤销。')) {
+      chatArea.innerHTML = '<div class="chat-date-divider">今天</div>';
+      addMsg('聊天记录已清空。有什么想聊的吗？', 'ai');
+    }
+  });
+
+  // ===== Send button state =====
+  chatInput.addEventListener('input', function(){
+    sendBtn.disabled = !this.value.trim();
+  });
+
+  // Auto-focus
+  chatInput.focus();
+})();
+</script>
+</body>
+</html>
