@@ -1,99 +1,85 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>帮助中心 — Angely</title>
-<link rel="stylesheet" href="common.css">
+<style>
+  :root { --bg: #f8f7fc; --text: #1a1a2e; --accent: #7c6ff7; --card: #fff; --border: #e8e6f0; --text-muted: #6b6b80; }
+  [data-theme="dark"] { --bg: #12121a; --text: #f0effc; --accent: #9b8fff; --card: #1a1a28; --border: #2e2e4a; --text-muted: #a0a0c0; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif; background:var(--bg); color:var(--text); line-height:1.8; padding:40px 20px 80px; }
+  .container { max-width:720px; margin:0 auto; }
+  h1 { font-size:28px; color:var(--accent); margin-bottom:24px; text-align:center; }
+  h2 { font-size:20px; margin:32px 0 12px; padding-bottom:8px; border-bottom:2px solid var(--accent); }
+  p, li { font-size:15px; }
+  ul { padding-left:24px; margin:8px 0; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; margin:16px 0; }
+  code { background:var(--bg); padding:2px 8px; border-radius:4px; font-family:'SF Mono','Consolas',monospace; font-size:13px; }
+  .back { text-align:center; margin-top:40px; }
+  .back a { color:var(--accent); text-decoration:none; font-size:15px; }
+</style>
 </head>
 <body>
-<a href="index.html" class="back-link">← 返回首页</a>
-<main class="legal">
-<h1>帮助中心</h1>
-<p class="update-date">常见问题与使用指南</p>
+<div class="container">
+<h1>📖 帮助中心</h1>
 
-<div class="help-section">
-<h2>🚀 快速入门</h2>
-<div class="help-grid">
-<a href="#install" class="help-card"><h3>💻 安装指南</h3><p>Windows / macOS / Android 各平台安装步骤</p></a>
-<a href="#voice" class="help-card"><h3>🎙️ 语音设置</h3><p>调节语速、音调、音量，切换情绪声线</p></a>
-<a href="#role" class="help-card"><h3>🎭 角色设定</h3><p>创建和自定义 AI 角色身份与性格</p></a>
-<a href="#search" class="help-card"><h3>🌐 联网搜索</h3><p>开启/关闭实时搜索功能</p></a>
-</div>
+<h2>快速开始</h2>
+<div class="card">
+<ol>
+  <li><strong>下载安装</strong>：从官网对应平台下载安装包。</li>
+  <li><strong>配置 API Key</strong>：首次启动时输入 DashScope API Key（<a href="https://dashscope.console.aliyun.com/apiKey" style="color:var(--accent)">获取地址</a>，免费注册即有额度）。</li>
+  <li><strong>开始聊天</strong>：输入消息，享受 AI 对话。</li>
+</ol>
 </div>
 
-<div class="help-section" id="install">
-<h2>💻 安装指南</h2>
-<h3>Windows</h3>
-<ul>
-<li>下载 <code>.exe</code> 安装包，双击运行安装向导，按提示完成安装。</li>
-<li>或下载 <code>.zip</code> 绿色免安装版，解压后直接运行 <code>Angely.exe</code>。</li>
-<li>如遇 SmartScreen 提示，点击「更多信息」→「仍要运行」即可。</li>
-<li>安装包附带 MD5/SHA-256 校验码，建议安装前核验文件完整性。</li>
-</ul>
-<h3>macOS</h3>
-<ul>
-<li>下载 <code>.dmg</code> 镜像文件，双击打开后将 Angely 拖入「应用程序」文件夹。</li>
-<li>首次打开如提示「无法验证开发者」：前往「系统设置 → 隐私与安全性」→ 找到 Angely → 点击「仍要打开」。</li>
-<li>此提示为 macOS Gatekeeper 标准安全机制，非软件安全问题。</li>
-</ul>
-<h3>Android</h3>
-<ul>
-<li>下载 <code>.apk</code> 安装包，点击打开。</li>
-<li>系统可能提示「禁止安装未知来源应用」→ 点击「设置」→ 开启「允许来自此来源的应用」→ 返回安装。</li>
-<li>这是 Android 对非应用商店安装包的标准安全提示，安装完成后可重新关闭此权限。</li>
-</ul>
+<h2>功能指南</h2>
+
+<h3>🎙 语音对话</h3>
+<p>设置中开启"自动朗读"，AI 回复会自动语音播放。支持 5 种情绪音色：温柔、活泼、沉稳、幽默、自动。</p>
+
+<h3>😊 表情互动</h3>
+<p>点击输入框左侧 😊 按钮选择表情。AI 会根据对话内容自动匹配表情。</p>
+
+<h3>🌐 联网搜索</h3>
+<p>设置中开启搜索开关，AI 会自动联网获取最新信息。断网时自动禁用。</p>
+
+<h3>🎭 角色扮演</h3>
+<p>点击顶部 🎭 按钮创建自定义角色。设定身份、性格、语气后，AI 会按角色设定对话。</p>
+
+<h3>🎨 主题切换</h3>
+<p>点击 🌙/☀️ 按钮切换深色/浅色模式。设置中可选 5 种主题色。</p>
+
+<h2>常见问题</h2>
+
+<div class="card">
+<p><strong>Q: 需要付费吗？</strong></p>
+<p>A: 软件完全免费。AI 对话通过您自己的 API Key 调用 DashScope，新用户有免费额度。</p>
 </div>
 
-<div class="help-section" id="voice">
-<h2>🎙️ 语音设置</h2>
-<ul>
-<li><strong>开启语音：</strong>点击顶部状态栏的语音开关图标即可开启/关闭语音功能。</li>
-<li><strong>语音对话：</strong>点击底部交互区的麦克风按钮，开始实时语音对话。</li>
-<li><strong>全文朗读：</strong>长按任意 AI 回复消息，选择「朗读」即可播放。</li>
-<li><strong>语速调节：</strong>设置 → 语音 → 拖动语速滑块（0.5x ~ 2.0x）。</li>
-<li><strong>音调调节：</strong>设置 → 语音 → 拖动音调滑块。</li>
-<li><strong>音量调节：</strong>设置 → 语音 → 拖动音量滑块，或使用系统音量键。</li>
-<li><strong>情绪声线：</strong>AI 根据对话内容自动切换情绪声线（温柔/活泼/沉稳/幽默），无需手动设置。您也可以在角色设定中指定偏好的声线风格。</li>
-</ul>
+<div class="card">
+<p><strong>Q: 聊天记录存在哪里？</strong></p>
+<p>A: 所有数据仅在本地加密存储，不上传任何服务器。可在设置中导出或清空。</p>
 </div>
 
-<div class="help-section" id="role">
-<h2>🎭 角色设定</h2>
-<ul>
-<li><strong>创建角色：</strong>设置 → 角色管理 → 新建角色 → 填写角色名称、身份、性格描述、语气风格。</li>
-<li><strong>行为逻辑：</strong>可在高级设置中进一步定义角色的行为规则、知识范围、禁忌话题。</li>
-<li><strong>切换角色：</strong>在聊天界面顶部点击当前角色名称，从列表中选择其他角色。</li>
-<li><strong>修改角色：</strong>设置 → 角色管理 → 选择角色 → 编辑 → 保存。</li>
-<li><strong>重置角色：</strong>设置 → 角色管理 → 选择角色 → 重置为默认。</li>
-<li><strong>记忆说明：</strong>角色设定具备长期记忆，跨对话持续生效。如需清除特定记忆，请在聊天中说明或手动重置角色。</li>
-</ul>
+<div class="card">
+<p><strong>Q: 支持哪些平台？</strong></p>
+<p>A: Windows（.exe）、macOS（.dmg）、Android（.apk）。</p>
 </div>
 
-<div class="help-section" id="search">
-<h2>🌐 联网搜索</h2>
-<ul>
-<li><strong>开启搜索：</strong>点击底部交互区的搜索按钮，或输入框内输入 <code>/search 关键词</code>。</li>
-<li><strong>自动总结：</strong>AI 会自动从搜索结果中提取关键信息，以自然口语化方式回复。</li>
-<li><strong>断网提示：</strong>当网络不可用时，搜索按钮自动变灰并显示「网络不可用」提示。</li>
-<li><strong>隐私说明：</strong>搜索请求经服务器转发，不记录搜索历史。详见《<a href="privacy.html">隐私政策</a>》。</li>
-</ul>
+<div class="card">
+<p><strong>Q: macOS 安装提示"无法验证开发者"怎么办？</strong></p>
+<p>A: 前往「系统设置 → 隐私与安全性」→ 点击「仍要打开」即可。</p>
 </div>
 
-<div class="help-section">
-<h2>📋 常见问题</h2>
-<h3>Q: 聊天记录保存在哪里？</h3>
-<p>聊天记录仅存储在您的本地设备上，默认使用 AES-256 加密。可在「设置 → 数据管理」中导出、备份或清空。</p>
-<h3>Q: 需要注册账号吗？</h3>
-<p>不需要。Angely 为完全本地化的应用，无需注册、无需登录即可使用全部功能。</p>
-<h3>Q: 有广告吗？</h3>
-<p>没有。Angely 承诺永久无广告、无弹窗、无捆绑推广。</p>
-<h3>Q: 支持哪些系统？</h3>
-<p>Windows 10+、macOS 12+、Android 8.0+。暂不支持 iOS 和 Linux。</p>
-<h3>Q: 如何反馈问题？</h3>
-<p>请发送邮件至 <a href="mailto:support@angely.app">support@angely.app</a>，附上问题描述、软件版本和系统信息。</p>
+<div class="card">
+<p><strong>Q: Android 安装提示"未知来源"怎么办？</strong></p>
+<p>A: 点击「设置 → 允许安装未知来源应用」→ 返回安装即可。这是 Android 标准安全提示。</p>
 </div>
-</main>
-<script src="theme.js"></script>
+
+<div class="back">
+<a href="index.html">← 返回首页</a>
+</div>
+</div>
 </body>
 </html>
