@@ -1,0 +1,9 @@
+﻿Angely v1.0.0 for macOS
+=======================
+This is a placeholder disk image. The full application is currently under development.
+
+Expected release: Coming Soon
+Platform: macOS 12+
+Size: ~92 MB (placeholder: this file is a stub)
+
+Visit https://ziyziy123.github.io/angely-website for updates.
