@@ -1,0 +1,9 @@
+﻿Angely v1.0.0 for Android
+=========================
+This is a placeholder APK. The full application is currently under development.
+
+Expected release: Coming Soon
+Platform: Android 8.0+
+Size: ~48 MB (placeholder: this file is a stub)
+
+Visit https://ziyziy123.github.io/angely-website for updates.
